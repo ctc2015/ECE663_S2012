@@ -24,7 +24,7 @@ public class LoopSkewPass extends TransformPass
 
     public String getPassName()
     {
-        return new String("[LoopInterchange]");
+        return new String("[LoopSkewing]");
     }
 
     public void start()
@@ -38,14 +38,27 @@ public class LoopSkewPass extends TransformPass
         int target_loops = 0;
         int num_single = 0, num_non_perfect = 0, num_contain_func = 0, num_loop_interchange=0;
 
-        while(iter.hasNext()) {
+        while(iter.hasNext()) { /*Iterate through program*/
             Object o = iter.next();
+//            System.err.println("Iterating...found: " + o.toString());
             if(o instanceof ForLoop)
                 outer_loops.add((Statement)o);
         }
+        
+        System.out.println("# of Loops found: " + outer_loops.size());
 
-        for(i = outer_loops.size()-1; i >= 0; i--)
+        for(i = outer_loops.size()-1; i >= 0; i--) /*For all loops*/
         {
+            if(LoopTools.isInnermostLoop(((ForLoop)outer_loops.get(i))))
+            {
+            	LinkedList<Loop> loopnest = LoopTools.calculateLoopNest((ForLoop)outer_loops.get(i));
+            }
+        }
+        
+        for(i = outer_loops.size()-1; i >= 0; i--) /*For all loops*/
+        {
+//            System.err.println("Loop nest value: " + LoopTools.calculateLoopNest((ForLoop)outer_loops.get(i)));
+        	System.err.println("[START]\nList of loop: " + outer_loops.toString() + "\n[END]\n");
             if(!LoopTools.isOutermostLoop((ForLoop)outer_loops.get(i)))
             {
                 outer_loops.remove(i);

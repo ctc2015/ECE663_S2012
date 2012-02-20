@@ -206,6 +206,23 @@ public class LoopTools {
     }
 
     /**
+     * Calculate the nest depth of loop
+     */
+    public int calculateLoopdepth(Loop loop) {
+    	int level = 0;
+        LinkedList<Loop> loopNest = new LinkedList<Loop>();
+        loopNest.add(loop);
+        Traversable t = loop.getParent();
+        while (t != null) {
+            if (t instanceof ForLoop) {
+                loopNest.addFirst((Loop)t);
+            }
+            t = t.getParent();
+            level++;
+        }
+        return level;
+    }
+    /**
      * Get common enclosing loops for loop1 and loop2
      */
     public static LinkedList<Loop> getCommonNest(Loop loop1, Loop loop2) {
